@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id      String    @id @default(uuid())
+  annee   Int
+  ville   String
+  Cohorte Cohorte[]
+
+  @@map("session")
+}
+
+model Cohorte {
+  code        String      @id
+  description String
+  sessionId   String      @map("session_id")
+  session     Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  Apprenant   Apprenant[]
+  Coach       Coach[]
+
+  @@map("cohorte")
+}
+
+model Ordinateur {
+  tag       String      @id
+  modele    String
+  fabricant String
+  Apprenant Apprenant[]
+
+  @@map("ordinateur")
+}
+
+model Apprenant {
+  matricule     String      @id @default(uuid())
+  nom           String
+  email         String @unique
+  prenom        String?
+  adresse       String
+  telephone     String
+  password      String
+  codeCohorte   String?      @map("code_cohorte")
+  cohort        Cohorte?    @relation(fields: [codeCohorte], references: [code], onDelete: SetNull)
+  tagOrdinateur String?      @map("tag_ordinateur")
+  ordinateur    Ordinateur? @relation(fields: [tagOrdinateur], references: [tag], onDelete: SetNull)
+
+  @@map("apprenant")
+}
+
+model Coach {
+  matricule   String   @id @default(uuid())
+  nom         String
+  email       String @unique
+  prenom      String?
+  adresse     String
+  telephone   String
+  password    String
+  codeCohorte String?   @map("code_cohorte")
+  cohort      Cohorte? @relation(fields: [codeCohorte], references: [code], onDelete: SetNull)
+
+  @@map("coach")
+}
