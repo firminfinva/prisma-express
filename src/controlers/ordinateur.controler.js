@@ -12,8 +12,12 @@ export async function getordinateurs(req, res) {
   res.json(ordinateurs);
 }
 
-export function updateordinateur(req, res) {
-  res.json("You have updated a ordinateur");
+export async function updateordinateur(req, res) {
+  const updatedOrdonateur = await prisma.ordinateur.update({
+    where: { id: req.body.id },
+    data: req.body,
+  });
+  res.json(updatedOrdonateur);
 }
 
 export async function deleteordinateur(req, res) {

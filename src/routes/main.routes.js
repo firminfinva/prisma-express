@@ -18,3 +18,8 @@ mainRouter.use("/", cohorteRouter);
 mainRouter.use("/", coachRouter);
 mainRouter.use("/", apprenantRouter);
 mainRouter.use("/", ordinateurRouter);
+mainRouter.use("/", (req, res) => {
+  res.json(
+    "We are live , you use this link to access the documentation https://docs.google.com/document/d/1knXcytncEIfKDhqP0boV20-PBVWNfVEnG-4vVTlxFYc/edit"
+  );
+});
