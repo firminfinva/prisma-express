@@ -59,7 +59,7 @@ export async function updateapprenant(req, res) {
       req.user.role == "apprenant" &&
       otherapprenant.email != req.user.email
     ) {
-      res.json("This email is already taken by ");
+      res.json("This email is already taken by another user");
     } else {
       if (req.user.role == "apprenant") {
         const updatedapprenant = await prisma.apprenant.update({
@@ -72,7 +72,6 @@ export async function updateapprenant(req, res) {
           where: { matricule: req.body.matricule },
           data: {
             nom: req.body.nom,
-            email: req.body.email,
             telephone: req.body.telephone,
             codeCohorte: req.body.codeCohorte,
             tagOrdinateur: req.body.tagOrdinateur,

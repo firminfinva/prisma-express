@@ -15,6 +15,20 @@ export async function createcoach(req, res) {
   res.json(coach);
 }
 
+export async function register(req, res) {
+  const othercoach = await prisma.coach.findUnique({
+    where: {
+      email: req.body.email,
+    },
+  });
+  if (othercoach) res.json("A coach with this email already exists");
+  const { password } = req.body;
+  const cryptPassword = await bcrypt.hash(password, 10);
+  req.body.password = cryptPassword;
+  const coach = await prisma.coach.create({ data: req.body });
+  res.json(coach);
+}
+
 export async function getcoachs(req, res) {
   const coachs = await prisma.coach.findMany({
     select: {
